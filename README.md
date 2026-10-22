@@ -9,7 +9,7 @@ The Micro:bit sends the colours on one data wire, and each LED takes its own.
 
 One strip has **10 LEDs**, numbered **0 to 9**. LED 0 is next to the wires.
 
-![Wire it: red to 3V, yellow to pin 1, black to GND](https://startabit.startabit.workers.dev/projects/microbit-rainbow-lightsaber/images/2-wire-it.png)
+![Wire it: red to 3V, yellow to pin 1, black to GND](https://www.startabit.com/projects/microbit-rainbow-lightsaber/images/2-wire-it.png)
 
 ## Step 1: Set up the strip and show a rainbow
 
@@ -117,10 +117,80 @@ input.onButtonPressed(Button.B, function () {
 
 Two strips plugged together? Change **10** to **20** and **9** to **19**.
 
-## Next: swing it @showdialog
+## Step 8: Swing it: a white flash
 
-Well done! Level 4 is on the [project page](https://startabit.startabit.workers.dev/projects/microbit-rainbow-lightsaber/#program):
-the blade flashes when you shake the Micro:bit, and changes colour when you tilt it.
+The Micro:bit feels movement with its **accelerometer**.
+
+In ``||input:on shake||``: ``||neopixel:show color||`` **white**, ``||basic:pause||`` **80** ms,
+then ``||neopixel:show color||`` **blue** again.
+
+```blocks
+let strip = neopixel.create(DigitalPin.P1, 10, NeoPixelMode.RGB)
+strip.setBrightness(40)
+input.onGesture(Gesture.Shake, function () {
+    strip.showColor(neopixel.colors(NeoPixelColors.White))
+    basic.pause(80)
+    strip.showColor(neopixel.colors(NeoPixelColors.Blue))
+})
+```
+
+## Step 9: Tilt to change the colour
+
+Make a variable **lit**: set it to **true** at the end of button A, and to **false** at the start of button B.
+
+In ``||basic:forever||``: ``||logic:if||`` **lit**, set a variable **hue** to ``||math:map||``
+``||input:acceleration (mg) x||`` from **-1023** to **1023** to **0** to **359**.
+Then ``||neopixel:show color||`` with ``||neopixel:hue||`` **hue**, saturation **100**, luminosity **50**.
+
+Tilting left and right turns the colour wheel. Now shake can end with **show color** of the same **hue**.
+
+```blocks
+let hue = 0
+let lit = false
+let strip = neopixel.create(DigitalPin.P1, 10, NeoPixelMode.RGB)
+strip.setBrightness(40)
+input.onButtonPressed(Button.A, function () {
+    for (let index = 0; index <= 9; index++) {
+        strip.setPixelColor(index, neopixel.colors(NeoPixelColors.Blue))
+        strip.show()
+        basic.pause(20)
+    }
+    lit = true
+})
+input.onButtonPressed(Button.B, function () {
+    lit = false
+    for (let index = 0; index <= 9; index++) {
+        strip.setPixelColor(9 - index, neopixel.colors(NeoPixelColors.Black))
+        strip.show()
+        basic.pause(20)
+    }
+})
+input.onGesture(Gesture.Shake, function () {
+    if (lit) {
+        strip.showColor(neopixel.colors(NeoPixelColors.White))
+        basic.pause(80)
+        strip.showColor(neopixel.hsl(hue, 100, 50))
+    }
+})
+basic.forever(function () {
+    if (lit) {
+        hue = Math.map(input.acceleration(Dimension.X), -1023, 1023, 0, 359)
+        strip.showColor(neopixel.hsl(hue, 100, 50))
+    }
+    basic.pause(50)
+})
+```
+
+## Step 10: Swing your lightsaber
+
+**Download** again. Press **A**, tilt the Micro:bit left and right, and give it a swing.
+
+Want to swing it without the USB cable? Plug in the battery pack after the download.
+
+## Well done! @showdialog
+
+Your lightsaber ignites, retracts, flashes and changes colour.
+More challenges are on the [project page](https://www.startabit.com/projects/microbit-rainbow-lightsaber/#challenges).
 
 ```package
 neopixel=github:microsoft/pxt-neopixel
