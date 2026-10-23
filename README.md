@@ -9,7 +9,7 @@ The Micro:bit sends the colours on one data wire, and each LED takes its own.
 
 One strip has **10 LEDs**, numbered **0 to 9**. LED 0 is next to the wires.
 
-![Wire it: red to 3V, yellow to pin 1, black to GND](https://www.startabit.com/projects/microbit-rainbow-lightsaber/images/2-wire-it.png)
+![Wire it: red to 3V, yellow to pin 1, black to GND](https://www.startabit.com/projects/rainbow-lightsaber/images/wiring-microbit.png)
 
 ## Step 1: Set up the strip
 
@@ -180,7 +180,7 @@ No cable? Plug in the battery pack after the download.
 ## Well done! @showdialog
 
 Your lightsaber ignites, retracts, flashes and changes colour.
-More challenges are on the [project page](https://www.startabit.com/projects/microbit-rainbow-lightsaber/#challenges).
+More challenges are on the [project page](https://www.startabit.com/projects/rainbow-lightsaber/#challenges).
 
 ```package
 neopixel=github:microsoft/pxt-neopixel
